@@ -35,7 +35,10 @@ let amount1 = Number(prompt('Во сколько это обойдется?'), '
 let expenses2 = prompt('Введите обязательную статью расходов?', ''); // Вторая обязательная статья расходов
 let amount2 = Number(prompt('Во сколько это обойдется?'), '');
 
-addExpenses = addExpenses.split(','); // переводим расходы в масссив 
+if (addExpenses != '') {
+    addExpenses = addExpenses.split(','); // переводим расходы в масссив 
+    console.log(addExpenses);
+}
 
 budgetMonth = (money) - (amount1 + amount2);
 console.log(`Ваш месячный бюджет равен: ${budgetMonth} рублей`); // Выводим бюджет на месяц пользователя

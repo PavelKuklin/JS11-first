@@ -13,7 +13,7 @@ let budgetDay;
 
 //задание к уроку 2;
 let showTypeOf = function(data) {
-    return console.log(data);
+    return console.log(typeof(data));
 }
 showTypeOf(money);
 showTypeOf(income);

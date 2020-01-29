@@ -1,17 +1,26 @@
 'use strict';
 
-let money = 25000;
+let isNumber = function(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+};
+
+let money;
 let income = 'Photographs';
 let addExpenses = 'pills';
-let deposit = false;
+let deposit;
 let mission = 16000;
 let period = 3;
 let budgetDay;
+let expenses = [];
 
-//задание к уроку 1;
-//alert('JS11: Урок #1:');
+let start = function() {
+    do {
+        money = prompt('Ваш месячный доход?', '');
+    } while (!isNumber(money))
 
-//задание к уроку 2;
+};
+start();
+
 let showTypeOf = function(data) {
     return console.log(typeof(data));
 }
@@ -24,28 +33,30 @@ console.log(`Период равен ${period} месяцев`);
 console.log(`Цель заработать ${mission} рублей`);
 addExpenses.toLowerCase(); // привести переменную к нижнему регистру.
 
-// Задание к уроку номер 3. 
-money = Number(prompt('Ваш месячный доход?', '')); //Узнаем ежемесяный доход пользователя и приводим тип к числу. 
 deposit = confirm('Есть ли у вас депозит в банке?');
 
 addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую', ''); // Массив возможных расходов.
 
-let expenses1 = prompt('Введите обязательную статью расходов?', ''); // Первая обязательная статья расходов
-let amount1 = Number(prompt('Во сколько это обойдется?'), '');
-
-let expenses2 = prompt('Введите обязательную статью расходов?', ''); // Вторая обязательная статья расходов
-let amount2 = Number(prompt('Во сколько это обойдется?'), '');
 
 if (addExpenses != '') {
     addExpenses = addExpenses.split(','); // переводим расходы в масссив 
     console.log(addExpenses);
 }
 
-// Задания у кроку 4
-
-const getExpensesMonth = function() {
-    return amount1 + amount2;
+let getExpensesMonth = function() {
+    let sum = 0;
+    let checkSum;
+    for (let i = 0; i < 2; i++) {
+        expenses[i] = prompt('Введите обязательную статью расходов?', '');
+        do {
+            checkSum = +prompt('Во сколько это обойдется?');
+        } while (!isNumber(checkSum))
+        sum += checkSum;
+    }
+    return sum;
 };
+
+//let expensesAmount = getExpensesMonth();
 
 const getAccumulatedMonth = function() {
     let credet = getExpensesMonth();
@@ -55,8 +66,17 @@ const getAccumulatedMonth = function() {
 let acumulatedMonth = getAccumulatedMonth();
 
 const getTargetMonth = function() {
-    return Math.ceil(mission / acumulatedMonth);
-}
+    let targetMonth;
+
+    targetMonth = Math.ceil(mission / acumulatedMonth);
+    if (isNumber(targetMonth) && targetMonth > 0) {
+        return `Цель будет достигнута через ${targetMonth} месяцев`;
+    } else {
+        return `Цель не будет достигнута`;
+    }
+};
+console.log(getTargetMonth());
+
 
 console.log(`Ваш месячный бюджет равен: ${acumulatedMonth} рублей`); // Выводим бюджет на месяц пользователя
 

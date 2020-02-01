@@ -1,7 +1,9 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: rgb(197, 194, 194);
+    background-image: url('../img/BGC.jpg');
+    color: antiquewhite;
+    font-size: 30px;
 }
 
 .container {

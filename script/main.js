@@ -1,6 +1,8 @@
 const start = document.getElementById('start'),
     additionalExpenses = document.getElementsByTagName('BUTTON')[0],
-    mandatoryExpenses = document.getElementsByTagName('BUTTON')[1];
+    mandatoryExpenses = document.getElementsByTagName('BUTTON')[1],
+    cancel = document.querySelector('#cancel'),
+    inputsBlock = document.querySelector('.data');
 
 
 let additionalInputs = document.querySelectorAll('.additional_income-item'),
@@ -46,7 +48,7 @@ const appData = { //Создаем главный обьект программ�
         start.disabled = !isNumber(salaryAmount.value);
     },
     start: function() {
-
+        console.log(this);
         if (salaryAmount.value === '') {
             alert('Ошибка, "поле месячный" доход, должно быть заполнено ');
             return
@@ -56,23 +58,42 @@ const appData = { //Создаем главный обьект программ�
         }
 
 
-        appData.getExpensens();
-        appData.getIncome();
-        appData.getExpensesMonth();
-        appData.getAddExpensens();
-        appData.getAddIncome();
-        appData.getBudget();
+        this.getExpensens();
+        this.getIncome();
+        this.getExpensesMonth();
+        this.getAddExpensens();
+        this.getAddIncome();
+        this.getBudget();
 
-        appData.showResult();
+        this.showResult();
+        start.style.display = 'none';
+        cancel.style.display = 'block';
+        let allLeftInputs = inputsBlock.querySelectorAll('input[type=text]');
+        allLeftInputs.forEach(function(item) {
+            item.setAttribute('disabled', true);
+        });
+        additionalExpenses.setAttribute('disabled', true);
+        mandatoryExpenses.setAttribute('disabled', true);
     },
-
+    cancel: function() {
+        inputs.forEach(item => item.value = '');
+        console.log('затычка');
+        start.style.display = 'block';
+        cancel.style.display = 'none';
+        let allLeftInputs = inputsBlock.querySelectorAll('input[type=text]');
+        allLeftInputs.forEach(function(item) {
+            item.setAttribute('disabled', false);
+        });
+        additionalExpenses.setAttribute('disabled', false);
+        mandatoryExpenses.setAttribute('disabled', false);
+    },
     showResult: function() {
-        budgetMonth.value = +appData.budgetMonth;
-        budgetDay.value = appData.budgetDay;
-        expensensMonth.value = appData.ExpensesMonth;
+        budgetMonth.value = +this.budgetMonth;
+        budgetDay.value = this.budgetDay;
+        expensensMonth.value = this.ExpensesMonth;
 
-        additionalExpensesVarriable.value = appData.addExpenses.join(', ');
-        additionalIncomeVarriable.value = appData.addIncome.join(', ');
+        additionalExpensesVarriable.value = this.addExpenses.join(', ');
+        additionalIncomeVarriable.value = this.addIncome.join(', ');
         targetMonthValue.value = this.getTargetMonth();
         incomePeriodValue.value = this.calcSavedMoney();
         periodSelectRange.addEventListener('change', (event) => {
@@ -139,8 +160,8 @@ const appData = { //Создаем главный обьект программ�
                 appData.income[itemIncome] = cashincome;
             }
         });
-        for (let key in appData.income) {
-            appData.incomeMonth += +this.income[key];
+        for (let key in this.income) {
+            this.incomeMonth += +this.income[key];
         }
     },
     getAddExpensens: function() {
@@ -165,16 +186,16 @@ const appData = { //Создаем главный обьект программ�
     budgetMonth: 0,
     ExpensesMonth: 0,
     getExpensesMonth: function() { //считаем сумму всех обязательных расходов на месяц
-        for (let key in appData.expenses) {
-            appData.ExpensesMonth += appData.expenses[key];
+        for (let key in this.expenses) {
+            this.ExpensesMonth += this.expenses[key];
         }
     },
     getBudget: function() {
-        appData.budgetMonth = (+appData.budget) + (+appData.incomeMonth) - appData.ExpensesMonth;
-        appData.budgetDay = Math.ceil(appData.budgetMonth / 30);
+        this.budgetMonth = (+this.budget) + (+this.incomeMonth) - this.ExpensesMonth;
+        this.budgetDay = Math.ceil(this.budgetMonth / 30);
     },
     getTargetMonth: function() {
-        return Math.ceil(targetAmount.value / appData.budgetMonth);
+        return Math.ceil(targetAmount.value / this.budgetMonth);
     },
     getStatusIncome: function() {
         if (appData.budgetDay >= 1200) {
@@ -208,14 +229,6 @@ const appData = { //Создаем главный обьект программ�
 appData.getStartValue();
 appData.validate();
 
-// console.log(`Выши расходы на месяц- ${appData.ExpensesMonth}`);
-// console.log(appData.getTargetMonth());
-// console.log(appData.getStatusIncome());
-// //пункт 13, выводит наш обьект в 
-// console.log('Наша программа включает в себя');
-// for (let key in appData) {
-//     console.log(`ключ ${key}: значение ${appData[key]}`);
-// }
 
 const showAddExpenses = () => {
     let arrString = '';
@@ -233,8 +246,8 @@ showAddExpenses();
 
 
 salaryAmount.addEventListener('input', appData.getStartValue);
-start.addEventListener('click', appData.start);
-
+start.addEventListener('click', appData.start.bind(appData));
+cancel.addEventListener('click', appData.cancel.bind(appData));
 mandatoryExpenses.addEventListener('click', appData.addExpensensBlock);
 additionalExpenses.addEventListener('click', appData.addIncomeBlock);
 periodSelectRange.addEventListener('input', appData.getRange);

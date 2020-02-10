@@ -2,6 +2,7 @@ const start = document.getElementById('start'),
     additionalExpenses = document.getElementsByTagName('BUTTON')[0],
     mandatoryExpenses = document.getElementsByTagName('BUTTON')[1];
 
+
 let additionalInputs = document.querySelectorAll('.additional_income-item'),
     budgetMonth = document.getElementsByClassName('budget_month-value')[0],
     budgetDay = document.getElementsByClassName('budget_day-value')[0],
@@ -20,7 +21,8 @@ let additionalInputs = document.querySelectorAll('.additional_income-item'),
     periodSelectRange = document.querySelector('.period-select'),
     ExpensensItem = document.querySelectorAll('.expenses-items'),
     incomeItem = document.querySelectorAll('.income-items'),
-    periodAmount = document.querySelector('.period-amount');
+    periodAmount = document.querySelector('.period-amount'),
+    inputs = document.querySelectorAll('input');
 
 //Добавляем старый файл 
 //необходимые функции для проверки ввода данных пользователем
@@ -85,6 +87,7 @@ const appData = { //Создаем главный обьект программ�
         cloneExpensensItem.childNodes[3].value = '';
         ExpensensItem[0].parentNode.insertBefore(cloneExpensensItem, mandatoryExpenses);
         ExpensensItem = document.querySelectorAll('.expenses-items');
+        inputs = document.querySelectorAll('input');
         if (ExpensensItem.length == 3) {
             mandatoryExpenses.style.display = 'none';
         }
@@ -99,6 +102,7 @@ const appData = { //Создаем главный обьект программ�
         cloneIncomeItem.childNodes[3].value = '';
         incomeItem[0].parentNode.insertBefore(cloneIncomeItem, additionalExpenses);
         incomeItem = document.querySelectorAll('.income-items');
+
         if (incomeItem.length === 3) {
             additionalExpenses.style.display = 'none';
         }
@@ -111,6 +115,19 @@ const appData = { //Создаем главный обьект программ�
                 appData.expenses[itemExpensens] = cashExpensens;
             }
         });
+    },
+    validate: () => {
+        let dataBlockInput = document.querySelector('.data');
+        dataBlockInput.addEventListener('input', () => {
+            let target = event.target;
+            if (target.placeholder === 'Наименование') {
+                target.value = target.value.replace(/[^а-я]/i, '');
+            }
+            if (target.placeholder === 'Сумма') {
+                target.value = target.value.replace(/[^0-9]/i, '');
+            }
+        });
+
     },
 
     getIncome: function() { /// ТУТ ДЗ
@@ -182,13 +199,14 @@ const appData = { //Создаем главный обьект программ�
 
         }
     },
+
     calcSavedMoney: function() {
         return this.budgetMonth * periodSelectRange.value;
     },
 };
 
 appData.getStartValue();
-
+appData.validate();
 
 // console.log(`Выши расходы на месяц- ${appData.ExpensesMonth}`);
 // console.log(appData.getTargetMonth());

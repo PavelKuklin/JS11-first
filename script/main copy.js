@@ -86,10 +86,13 @@ AppData.prototype.cancel = function () {
         item.removeAttribute('disabled', true);
         item.value = '';
     });
+
     let getRightInputClear = getRightFormInputClear.querySelectorAll('input[type=text]');
     getRightInputClear.forEach((item) => {
         item.value = '';
     });
+    periodSelectRange.value = 1;
+    periodAmount.innerHTML = 1;
     additionalExpenses.removeAttribute('disabled', true);
     mandatoryExpenses.removeAttribute('disabled', true);
 };

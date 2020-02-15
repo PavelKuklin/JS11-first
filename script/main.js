@@ -3,10 +3,8 @@ const start = document.getElementById('start'),
     mandatoryExpenses = document.getElementsByTagName('BUTTON')[1],
     cancel = document.querySelector('#cancel'),
     inputsBlock = document.querySelector('.data'),
-    getRightFormInputClear = document.querySelector('.result');
-
-
-let additionalInputs = document.querySelectorAll('.additional_income-item'),
+    getRightFormInputClear = document.querySelector('.result'),
+    additionalInputs = document.querySelectorAll('.additional_income-item'),
     budgetMonth = document.getElementsByClassName('budget_month-value')[0],
     budgetDay = document.getElementsByClassName('budget_day-value')[0],
     expensensMonth = document.getElementsByClassName('expenses_month-value')[0],
@@ -52,7 +50,7 @@ class AppData {
     }
 
     start() {
-        let _this = this;
+        const _this = this;
         if (salaryAmount.value === '') {
             alert('Ошибка, "поле месячный" доход, должно быть заполнено ');
             return
@@ -60,8 +58,7 @@ class AppData {
             _this.budget = salaryAmount.value;
         }
 
-        this.getExpensens();
-        this.getIncome();
+        this.getExpInc()
         this.getExpensesMonth();
         this.getAddExpensens();
         this.getAddIncome();
@@ -70,7 +67,7 @@ class AppData {
         this.showResult();
         start.style.display = 'none';
         cancel.style.display = 'block';
-        let allLeftInputs = inputsBlock.querySelectorAll('input[type=text]');
+        const allLeftInputs = inputsBlock.querySelectorAll('input[type=text]');
         allLeftInputs.forEach(function(item) {
             item.setAttribute('disabled', true);
 
@@ -96,13 +93,13 @@ class AppData {
 
         start.style.display = 'block';
         cancel.style.display = 'none';
-        let allLeftInputs = inputsBlock.querySelectorAll('input[type=text]');
+        const allLeftInputs = inputsBlock.querySelectorAll('input[type=text]');
         allLeftInputs.forEach(function(item) {
             item.removeAttribute('disabled', true);
             item.value = '';
         });
 
-        let getRightInputClear = getRightFormInputClear.querySelectorAll('input[type=text]');
+        const getRightInputClear = getRightFormInputClear.querySelectorAll('input[type=text]');
         getRightInputClear.forEach((item) => {
             item.value = '';
         });
@@ -127,7 +124,7 @@ class AppData {
     }
 
     addExpensensBlock() {
-        let cloneExpensensItem = ExpensensItem[0].cloneNode(true);
+        const cloneExpensensItem = ExpensensItem[0].cloneNode(true);
         cloneExpensensItem.childNodes[1].value = '';
         cloneExpensensItem.childNodes[3].value = '';
         ExpensensItem[0].parentNode.insertBefore(cloneExpensensItem, mandatoryExpenses);
@@ -143,7 +140,7 @@ class AppData {
     }
 
     addIncomeBlock() {
-        let cloneIncomeItem = incomeItem[0].cloneNode(true);
+        const cloneIncomeItem = incomeItem[0].cloneNode(true);
         cloneIncomeItem.childNodes[1].value = '';
         cloneIncomeItem.childNodes[3].value = '';
         incomeItem[0].parentNode.insertBefore(cloneIncomeItem, additionalExpenses);
@@ -154,21 +151,31 @@ class AppData {
         }
     }
 
-    getExpensens() {
-        let _this = this;
-        ExpensensItem.forEach(function(item) {
-            let itemExpensens = item.querySelector('.expenses-title').value;
-            let cashExpensens = +item.querySelector('.expenses-amount').value;
-            if (itemExpensens != '' && cashExpensens != '') {
-                _this.expenses[itemExpensens] = cashExpensens;
+    getExpInc() {
+        const count = item => {
+            const startStr = item.className.split('-')[0];
+            console.log(startStr);
+
+            const itemTitle = item.querySelector(`.${startStr}-title`).value;
+            const itemAmount = item.querySelector(`.${startStr}-amount`).value;
+            if (itemTitle != '' && itemAmount != '') {
+                this[startStr][itemTitle] = +itemAmount;
             }
-        });
+        }
+
+        incomeItem.forEach(count);
+        ExpensensItem.forEach(count);
+
+        for (let key in this.income) {
+            this.incomeMonth += +this.income[key];
+        }
+
     }
 
     validate() {
-        let dataBlockInput = document.querySelector('.data');
+        const dataBlockInput = document.querySelector('.data');
         dataBlockInput.addEventListener('input', () => {
-            let target = event.target;
+            const target = event.target;
             if (target.placeholder === 'Наименование') {
                 target.value = target.value.replace(/[^а-я]/i, '');
             }
@@ -178,23 +185,9 @@ class AppData {
         });
     }
 
-    getIncome() {
-        let _this = this;
-        incomeItem.forEach(function(item) {
-            let itemIncome = item.querySelector('.income-title').value;
-            let cashincome = item.querySelector('.income-amount').value;
-            if (itemIncome != '' && cashincome != '') {
-                _this.income[itemIncome] = cashincome;
-            }
-        });
-        for (let key in this.income) {
-            this.incomeMonth += +this.income[key];
-        }
-    }
-
     getAddExpensens() {
-        let _this = this;
-        let addExpensens = additionalExpensesItem.value.split(',');
+        const _this = this;
+        const addExpensens = additionalExpensesItem.value.split(',');
         addExpensens.forEach(function(item) {
             item = item.trim();
             if (item != '') {
@@ -204,9 +197,9 @@ class AppData {
     }
 
     getAddIncome() {
-        let _this = this;
+        const _this = this;
         additionalInputs.forEach(function(item) {
-            let itemValue = item.value.trim();
+            const itemValue = item.value.trim();
             if (itemValue !== '') {
                 _this.addIncome.push(itemValue);
             }
@@ -229,7 +222,7 @@ class AppData {
     }
 
     getStatusIncome() {
-        let _this = this;
+        const _this = this;
         if (_this.budgetDay >= 1200) {
             return 'У вас высокий уровень дохода';
         } else if (_this.budgetDay >= 600) {

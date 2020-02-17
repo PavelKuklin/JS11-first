@@ -123,7 +123,7 @@ class AppData {
         mandatoryExpenses.removeAttribute('disabled', true);
         additionalExpenses.style.display = 'block';
         mandatoryExpenses.style.display = 'block';
-    }
+    } //комментарий
 
     showResult() {
         budgetMonth.value = +this.budgetMonth;

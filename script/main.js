@@ -20,10 +20,11 @@ const start = document.getElementById('start'),
     additionalExpensesItem = document.querySelector('.additional_expenses-item'),
     targetAmount = document.querySelector('.target-amount'),
     periodSelectRange = document.querySelector('.period-select'),
-    ExpensensItem = document.querySelectorAll('.expenses-items'),
-    incomeItem = document.querySelectorAll('.income-items'),
     periodAmount = document.querySelector('.period-amount'),
     inputs = document.querySelectorAll('input');
+
+let ExpensensItem = document.querySelectorAll('.expenses-items'),
+    incomeItem = document.querySelectorAll('.income-items');
 
 
 const isNumber = (n) => !isNaN(parseFloat(n)) && isFinite(n);
@@ -129,7 +130,7 @@ class AppData {
         cloneExpensensItem.childNodes[3].value = '';
         ExpensensItem[0].parentNode.insertBefore(cloneExpensensItem, mandatoryExpenses);
         ExpensensItem = document.querySelectorAll('.expenses-items');
-        inputs = document.querySelectorAll('input');
+        //inputs = document.querySelectorAll('input');
         if (ExpensensItem.length == 3) {
             mandatoryExpenses.style.display = 'none';
         }
@@ -154,8 +155,6 @@ class AppData {
     getExpInc() {
         const count = item => {
             const startStr = item.className.split('-')[0];
-            console.log(startStr);
-
             const itemTitle = item.querySelector(`.${startStr}-title`).value;
             const itemAmount = item.querySelector(`.${startStr}-amount`).value;
             if (itemTitle != '' && itemAmount != '') {
@@ -222,12 +221,12 @@ class AppData {
     }
 
     getStatusIncome() {
-        const _this = this;
-        if (_this.budgetDay >= 1200) {
+        // const _this = this;
+        if (this.budgetDay >= 1200) {
             return 'У вас высокий уровень дохода';
-        } else if (_this.budgetDay >= 600) {
+        } else if (this.budgetDay >= 600) {
             return 'У вас средний уровень дохода';
-        } else if (_this.budgetDay < 600 && _this.budgetDay >= 0) {
+        } else if (this.budgetDay < 600 && this.budgetDay >= 0) {
             return 'К сожалению у вас уровень дохода ниже среднего';
         } else {
             return 'Что то пошло не так';
@@ -243,8 +242,8 @@ class AppData {
         this.validate();
 
         salaryAmount.addEventListener('input', this.getStartValue);
-        start.addEventListener('click', this.start.bind(appData));
-        cancel.addEventListener('click', this.cancel.bind(appData));
+        start.addEventListener('click', this.start.bind(this));
+        cancel.addEventListener('click', this.cancel.bind(this));
         mandatoryExpenses.addEventListener('click', this.addExpensensBlock);
         additionalExpenses.addEventListener('click', this.addIncomeBlock);
         periodSelectRange.addEventListener('input', this.getRange);

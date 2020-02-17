@@ -15,15 +15,15 @@ const start = document.getElementById('start'),
     salaryAmount = document.querySelector('.salary-amount'),
     incomeTitle = document.querySelector('.income-title'),
     incomeAmount = document.querySelector('.income-amount'),
-    expensesTitle = document.querySelector('.expenses-title'),
-    expensesAmount = document.querySelector('.expenses-amount'),
+    expensesTitle = document.querySelector('.Expenses-title'),
+    expensesAmount = document.querySelector('.Expenses-amount'),
     additionalExpensesItem = document.querySelector('.additional_expenses-item'),
     targetAmount = document.querySelector('.target-amount'),
     periodSelectRange = document.querySelector('.period-select'),
     periodAmount = document.querySelector('.period-amount'),
     inputs = document.querySelectorAll('input');
 
-let ExpensensItem = document.querySelectorAll('.expenses-items'),
+let ExpensensItem = document.querySelectorAll('.Expenses-items'),
     incomeItem = document.querySelectorAll('.income-items');
 
 
@@ -34,7 +34,7 @@ class AppData {
         this.income = {};
         this.incomeMonth = 0;
         this.addIncome = [];
-        this.expenses = {};
+        this.Expenses = {};
         this.addExpenses = [];
         this.deposit = false;
         this.percentDeposit = 0;
@@ -69,19 +69,20 @@ class AppData {
         start.style.display = 'none';
         cancel.style.display = 'block';
         const allLeftInputs = inputsBlock.querySelectorAll('input[type=text]');
-        allLeftInputs.forEach(function(item) {
+        allLeftInputs.forEach(function (item) {
             item.setAttribute('disabled', true);
 
         });
         additionalExpenses.setAttribute('disabled', true);
         mandatoryExpenses.setAttribute('disabled', true);
+        //addEncExpBlock.setAttribute('disabled', true);
     }
 
     cancel() {
         this.income = {};
         this.incomeMonth = 0;
         this.addIncome = [];
-        this.expenses = {};
+        this.Expenses = {};
         this.addExpenses = [];
         this.deposit = false;
         this.percentDeposit = 0;
@@ -92,10 +93,22 @@ class AppData {
         this.budgetMonth = 0;
         this.ExpensesMonth = 0;
 
+        //удаляем новые блоки при обнуление
+        if (ExpensensItem.length > 1) {
+            for (let i = 1; i < ExpensensItem.length; i++) {
+                ExpensensItem[i].remove();
+            }
+        }
+        if (incomeItem.length > 1) {
+            for (let i = 1; i < incomeItem.length; i++) {
+                incomeItem[i].remove();
+            }
+        }
+
         start.style.display = 'block';
         cancel.style.display = 'none';
         const allLeftInputs = inputsBlock.querySelectorAll('input[type=text]');
-        allLeftInputs.forEach(function(item) {
+        allLeftInputs.forEach(function (item) {
             item.removeAttribute('disabled', true);
             item.value = '';
         });
@@ -124,32 +137,28 @@ class AppData {
         });
     }
 
-    addExpensensBlock() {
-        const cloneExpensensItem = ExpensensItem[0].cloneNode(true);
-        cloneExpensensItem.childNodes[1].value = '';
-        cloneExpensensItem.childNodes[3].value = '';
-        ExpensensItem[0].parentNode.insertBefore(cloneExpensensItem, mandatoryExpenses);
-        ExpensensItem = document.querySelectorAll('.expenses-items');
-        //inputs = document.querySelectorAll('input');
-        if (ExpensensItem.length == 3) {
-            mandatoryExpenses.style.display = 'none';
+    addEncExpBlock() {
+        const isButton = event.target.classList[1].split('_'),
+            thisButton = document.querySelector(`.${isButton[0]}_add`);
+        let MyItem = document.querySelectorAll(`.${isButton[0]}-items`),
+            cloneMyItem = MyItem[0].cloneNode(true);
+        cloneMyItem.childNodes[1].value = '';
+        cloneMyItem.childNodes[3].value = '';
+        MyItem[0].parentNode.insertBefore(cloneMyItem, thisButton);
+        MyItem = document.querySelectorAll(`.${isButton[0]}-items`)
+        if (MyItem.length == 3) {
+            thisButton.style.display = 'none';
+        }
+        if (isButton[0] === 'Expenses') { //обновляем наши переменные для других методов
+            ExpensensItem = document.querySelectorAll('.Expenses-items');
+
+        } else if (isButton[0] === 'income') {
+            incomeItem = document.querySelectorAll('.income-items');
         }
     }
 
     getRange() {
         periodAmount.innerHTML = periodSelectRange.value;
-    }
-
-    addIncomeBlock() {
-        const cloneIncomeItem = incomeItem[0].cloneNode(true);
-        cloneIncomeItem.childNodes[1].value = '';
-        cloneIncomeItem.childNodes[3].value = '';
-        incomeItem[0].parentNode.insertBefore(cloneIncomeItem, additionalExpenses);
-        incomeItem = document.querySelectorAll('.income-items');
-
-        if (incomeItem.length === 3) {
-            additionalExpenses.style.display = 'none';
-        }
     }
 
     getExpInc() {
@@ -161,10 +170,8 @@ class AppData {
                 this[startStr][itemTitle] = +itemAmount;
             }
         }
-
-        incomeItem.forEach(count);
         ExpensensItem.forEach(count);
-
+        incomeItem.forEach(count);
         for (let key in this.income) {
             this.incomeMonth += +this.income[key];
         }
@@ -187,7 +194,7 @@ class AppData {
     getAddExpensens() {
         const _this = this;
         const addExpensens = additionalExpensesItem.value.split(',');
-        addExpensens.forEach(function(item) {
+        addExpensens.forEach(function (item) {
             item = item.trim();
             if (item != '') {
                 _this.addExpenses.push(item);
@@ -197,7 +204,7 @@ class AppData {
 
     getAddIncome() {
         const _this = this;
-        additionalInputs.forEach(function(item) {
+        additionalInputs.forEach(function (item) {
             const itemValue = item.value.trim();
             if (itemValue !== '') {
                 _this.addIncome.push(itemValue);
@@ -206,8 +213,8 @@ class AppData {
     }
 
     getExpensesMonth() { //считаем сумму всех обязательных расходов на месяц
-        for (let key in this.expenses) {
-            this.ExpensesMonth += this.expenses[key];
+        for (let key in this.Expenses) {
+            this.ExpensesMonth += this.Expenses[key];
         }
     }
 
@@ -244,8 +251,10 @@ class AppData {
         salaryAmount.addEventListener('input', this.getStartValue);
         start.addEventListener('click', this.start.bind(this));
         cancel.addEventListener('click', this.cancel.bind(this));
-        mandatoryExpenses.addEventListener('click', this.addExpensensBlock);
-        additionalExpenses.addEventListener('click', this.addIncomeBlock);
+        // mandatoryExpenses.addEventListener('click', this.addExpensensBlock);
+        // additionalExpenses.addEventListener('click', this.addIncomeBlock);
+        mandatoryExpenses.addEventListener('click', this.addEncExpBlock);
+        additionalExpenses.addEventListener('click', this.addEncExpBlock);
         periodSelectRange.addEventListener('input', this.getRange);
     }
 }

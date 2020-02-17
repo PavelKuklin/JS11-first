@@ -21,7 +21,8 @@ const start = document.getElementById('start'),
     targetAmount = document.querySelector('.target-amount'),
     periodSelectRange = document.querySelector('.period-select'),
     periodAmount = document.querySelector('.period-amount'),
-    inputs = document.querySelectorAll('input');
+    inputs = document.querySelectorAll('input'),
+    depositCheck = document.querySelector('#deposit-check');
 
 let ExpensensItem = document.querySelectorAll('.Expenses-items'),
     incomeItem = document.querySelectorAll('.income-items');
@@ -246,15 +247,21 @@ class AppData {
         return this.budgetMonth * periodSelectRange.value;
     }
 
+    depositHendler() {
+        if (depositCheck.checked) {
+            console.log('check');
+        } else {
+            console.log('unchecked');
+        }
+    }
+
     eventListeners() {
         this.getStartValue();
         this.validate();
-
+        depositCheck.addEventListener('change', this.depositHendler.bind(this));
         salaryAmount.addEventListener('input', this.getStartValue);
         start.addEventListener('click', this.start.bind(this));
         cancel.addEventListener('click', this.cancel.bind(this));
-        // mandatoryExpenses.addEventListener('click', this.addExpensensBlock);
-        // additionalExpenses.addEventListener('click', this.addIncomeBlock);
         mandatoryExpenses.addEventListener('click', this.addEncExpBlock);
         additionalExpenses.addEventListener('click', this.addEncExpBlock);
         periodSelectRange.addEventListener('input', this.getRange);

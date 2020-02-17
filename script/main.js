@@ -121,6 +121,8 @@ class AppData {
         periodAmount.innerHTML = 1;
         additionalExpenses.removeAttribute('disabled', true);
         mandatoryExpenses.removeAttribute('disabled', true);
+        additionalExpenses.style.display = 'block';
+        mandatoryExpenses.style.display = 'block';
     }
 
     showResult() {

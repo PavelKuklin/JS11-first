@@ -103,11 +103,13 @@ class AppData {
         //удаляем новые блоки при обнуление
         if (expensensItem.length > 1) {
             for (let i = 1; i < expensensItem.length; i++) {
+                expensensItem[i].value = '';
                 expensensItem[i].remove();
             }
         }
         if (incomeItem.length > 1) {
             for (let i = 1; i < incomeItem.length; i++) {
+                incomeItem[i].value = '';
                 incomeItem[i].remove();
             }
         }
@@ -138,7 +140,8 @@ class AppData {
         depositBank.value = '';
         depositAmount.value = '';
         depositPercent.value = '';
-
+        expensensItem = document.querySelectorAll('.expenses-items'),
+            incomeItem = document.querySelectorAll('.income-items');
     }
 
     showResult() {

@@ -75,7 +75,7 @@ class AppData {
         start.style.display = 'none';
         cancel.style.display = 'block';
         const allLeftInputs = inputsBlock.querySelectorAll('input[type=text]');
-        allLeftInputs.forEach(function(item) {
+        allLeftInputs.forEach(function (item) {
             item.setAttribute('disabled', true);
 
         });
@@ -98,7 +98,6 @@ class AppData {
         this.budgetDay = 0;
         this.budgetMonth = 0;
         this.expensesMonth = 0;
-
         //удаляем новые блоки при обнуление
         if (expensensItem.length > 1) {
             for (let i = 1; i < expensensItem.length; i++) {
@@ -114,9 +113,10 @@ class AppData {
         start.style.display = 'block';
         cancel.style.display = 'none';
         const allLeftInputs = inputsBlock.querySelectorAll('input[type=text]');
-        allLeftInputs.forEach(function(item) {
+        allLeftInputs.forEach(function (item) {
             item.removeAttribute('disabled', true);
             item.value = '';
+
         });
 
         const getRightInputClear = getRightFormInputClear.querySelectorAll('input[type=text]');
@@ -129,6 +129,14 @@ class AppData {
         mandatoryExpenses.removeAttribute('disabled', true);
         additionalExpenses.style.display = 'block';
         mandatoryExpenses.style.display = 'block';
+        depositCheck.checked = false;
+        depositBank.style.display = 'none';
+        depositAmount.style.display = 'none';
+        depositPercent.style.display = 'none';
+        depositBank.value = '';
+        depositAmount.value = '';
+        depositPercent.value = '';
+
     }
 
     showResult() {
@@ -202,7 +210,7 @@ class AppData {
     getAddExpensens() {
         const _this = this;
         const addExpensens = additionalExpensesItem.value.split(',');
-        addExpensens.forEach(function(item) {
+        addExpensens.forEach(function (item) {
             item = item.trim();
             if (item != '') {
                 _this.addExpenses.push(item);
@@ -212,7 +220,7 @@ class AppData {
 
     getAddIncome() {
         const _this = this;
-        additionalInputs.forEach(function(item) {
+        additionalInputs.forEach(function (item) {
             const itemValue = item.value.trim();
             if (itemValue !== '') {
                 _this.addIncome.push(itemValue);

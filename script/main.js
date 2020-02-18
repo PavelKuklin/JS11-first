@@ -75,7 +75,7 @@ class AppData {
         start.style.display = 'none';
         cancel.style.display = 'block';
         const allLeftInputs = inputsBlock.querySelectorAll('input[type=text]');
-        allLeftInputs.forEach(function (item) {
+        allLeftInputs.forEach(function(item) {
             item.setAttribute('disabled', true);
 
         });
@@ -114,7 +114,7 @@ class AppData {
         start.style.display = 'block';
         cancel.style.display = 'none';
         const allLeftInputs = inputsBlock.querySelectorAll('input[type=text]');
-        allLeftInputs.forEach(function (item) {
+        allLeftInputs.forEach(function(item) {
             item.removeAttribute('disabled', true);
             item.value = '';
         });
@@ -193,7 +193,7 @@ class AppData {
             if (target.placeholder === 'Наименование') {
                 target.value = target.value.replace(/[^а-я]/i, '');
             }
-            if (target.placeholder === 'Сумма') {
+            if (target.placeholder === 'Сумма' || target.placeholder === 'Процент') {
                 target.value = target.value.replace(/[^0-9]/i, '');
             }
         });
@@ -202,7 +202,7 @@ class AppData {
     getAddExpensens() {
         const _this = this;
         const addExpensens = additionalExpensesItem.value.split(',');
-        addExpensens.forEach(function (item) {
+        addExpensens.forEach(function(item) {
             item = item.trim();
             if (item != '') {
                 _this.addExpenses.push(item);
@@ -212,7 +212,7 @@ class AppData {
 
     getAddIncome() {
         const _this = this;
-        additionalInputs.forEach(function (item) {
+        additionalInputs.forEach(function(item) {
             const itemValue = item.value.trim();
             if (itemValue !== '') {
                 _this.addIncome.push(itemValue);
@@ -268,6 +268,17 @@ class AppData {
         } else {
             depositPercent.style.display = 'none';
             depositPercent.value = valueSelect;
+            depositPercent.value = '';
+        }
+    }
+
+    getPrecent() {
+        if (this.value < 0 || this.value > 100) {
+            alert('Процент должен быть от 0 до 100');
+            let correctValue = this.value.slice(0, -1);
+            this.value = correctValue;
+            //this.blur();
+            this.innerHTML = correctValue;
         }
     }
 
@@ -283,10 +294,12 @@ class AppData {
             depositPercent.style.display = 'none';
             depositBank.value = '';
             depositAmount.value = '';
+            depositPercent.value = '';
             this.deposit = false;
             depositBank.removeEventListener('change', this.changePercent);
         }
     }
+
 
     eventListeners() {
         this.getStartValue();
@@ -298,6 +311,7 @@ class AppData {
         mandatoryExpenses.addEventListener('click', this.addEncExpBlock);
         additionalExpenses.addEventListener('click', this.addEncExpBlock);
         periodSelectRange.addEventListener('input', this.getRange);
+        depositPercent.addEventListener('input', this.getPrecent);
     }
 }
 const appData = new AppData();

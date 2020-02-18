@@ -64,10 +64,12 @@ class AppData {
             _this.budget = salaryAmount.value;
         }
 
-        this.getExpInc()
+        this.getExpInc();
+        this.getAddExpenInc(additionalExpensesItem.value.split(','));
+        this.getAddExpenInc(additionalInputs);
         this.getExpensesMonth();
-        this.getAddExpensens();
-        this.getAddIncome();
+        // this.getAddExpensens();
+        //this.getAddIncome();
         this.getInfoDeposit();
         this.getBudget();
 
@@ -101,11 +103,13 @@ class AppData {
         //удаляем новые блоки при обнуление
         if (expensensItem.length > 1) {
             for (let i = 1; i < expensensItem.length; i++) {
+                expensensItem[i].value = '';
                 expensensItem[i].remove();
             }
         }
         if (incomeItem.length > 1) {
             for (let i = 1; i < incomeItem.length; i++) {
+                incomeItem[i].value = '';
                 incomeItem[i].remove();
             }
         }
@@ -136,7 +140,8 @@ class AppData {
         depositBank.value = '';
         depositAmount.value = '';
         depositPercent.value = '';
-
+        expensensItem = document.querySelectorAll('.expenses-items'),
+            incomeItem = document.querySelectorAll('.income-items');
     }
 
     showResult() {
@@ -207,25 +212,18 @@ class AppData {
         });
     }
 
-    getAddExpensens() {
+    getAddExpenInc(array) {
         const _this = this;
-        const addExpensens = additionalExpensesItem.value.split(',');
-        addExpensens.forEach(function (item) {
-            item = item.trim();
-            if (item != '') {
+        const getArray = array;
+        getArray.forEach(function (item) {
+            if (item != '' && array !== additionalInputs) {
+                item = item.trim();
                 _this.addExpenses.push(item);
+            } else if (item != '' && array === additionalInputs) {
+                item = item.value.trim();
+                _this.addIncome.push(item);
             }
         });
-    }
-
-    getAddIncome() {
-        const _this = this;
-        additionalInputs.forEach(function (item) {
-            const itemValue = item.value.trim();
-            if (itemValue !== '') {
-                _this.addIncome.push(itemValue);
-            }
-        })
     }
 
     getExpensesMonth() { //считаем сумму всех обязательных расходов на месяц

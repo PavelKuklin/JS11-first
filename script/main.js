@@ -15,8 +15,8 @@ const start = document.getElementById('start'),
     salaryAmount = document.querySelector('.salary-amount'),
     incomeTitle = document.querySelector('.income-title'),
     incomeAmount = document.querySelector('.income-amount'),
-    expensesTitle = document.querySelector('.Expenses-title'),
-    expensesAmount = document.querySelector('.Expenses-amount'),
+    expensesTitle = document.querySelector('.expenses-title'),
+    expensesAmount = document.querySelector('.expenses-amount'),
     additionalExpensesItem = document.querySelector('.additional_expenses-item'),
     targetAmount = document.querySelector('.target-amount'),
     periodSelectRange = document.querySelector('.period-select'),
@@ -27,9 +27,9 @@ const start = document.getElementById('start'),
     depositAmount = document.querySelector('.deposit-amount'),
     depositPercent = document.querySelector('.deposit-percent');
 
-let ExpensensItem = document.querySelectorAll('.Expenses-items'),
+let expensensItem = document.querySelectorAll('.expenses-items'),
     incomeItem = document.querySelectorAll('.income-items');
-console.log(ExpensensItem);
+console.log(expensensItem);
 
 
 const isNumber = (n) => !isNaN(parseFloat(n)) && isFinite(n);
@@ -39,7 +39,7 @@ class AppData {
         this.income = {};
         this.incomeMonth = 0;
         this.addIncome = [];
-        this.Expenses = {};
+        this.expenses = {};
         this.addExpenses = [];
         this.deposit = false;
         this.percentDeposit = 0;
@@ -48,7 +48,7 @@ class AppData {
         this.budget = 0;
         this.budgetDay = 0;
         this.budgetMonth = 0;
-        this.ExpensesMonth = 0;
+        this.expensesMonth = 0;
     }
 
     getStartValue() {
@@ -88,7 +88,7 @@ class AppData {
         this.income = {};
         this.incomeMonth = 0;
         this.addIncome = [];
-        this.Expenses = {};
+        this.expenses = {};
         this.addExpenses = [];
         this.deposit = false;
         this.percentDeposit = 0;
@@ -97,12 +97,12 @@ class AppData {
         this.budget = 0;
         this.budgetDay = 0;
         this.budgetMonth = 0;
-        this.ExpensesMonth = 0;
+        this.expensesMonth = 0;
 
         //удаляем новые блоки при обнуление
-        if (ExpensensItem.length > 1) {
-            for (let i = 1; i < ExpensensItem.length; i++) {
-                ExpensensItem[i].remove();
+        if (expensensItem.length > 1) {
+            for (let i = 1; i < expensensItem.length; i++) {
+                expensensItem[i].remove();
             }
         }
         if (incomeItem.length > 1) {
@@ -134,7 +134,7 @@ class AppData {
     showResult() {
         budgetMonth.value = +this.budgetMonth;
         budgetDay.value = this.budgetDay;
-        expensensMonth.value = this.ExpensesMonth;
+        expensensMonth.value = this.expensesMonth;
 
         additionalExpensesVarriable.value = this.addExpenses.join(', ');
         additionalIncomeVarriable.value = this.addIncome.join(', ');
@@ -157,8 +157,8 @@ class AppData {
         if (MyItem.length == 3) {
             thisButton.style.display = 'none';
         }
-        if (isButton[0] === 'Expenses') { //обновляем наши переменные для других методов
-            ExpensensItem = document.querySelectorAll('.Expenses-items');
+        if (isButton[0] === 'expenses') { //обновляем наши переменные для других методов
+            expensensItem = document.querySelectorAll('.expenses-items');
 
         } else if (isButton[0] === 'income') {
             incomeItem = document.querySelectorAll('.income-items');
@@ -178,7 +178,7 @@ class AppData {
                 this[startStr][itemTitle] = +itemAmount;
             }
         }
-        ExpensensItem.forEach(count);
+        expensensItem.forEach(count);
         incomeItem.forEach(count);
         for (let key in this.income) {
             this.incomeMonth += +this.income[key];
@@ -221,14 +221,14 @@ class AppData {
     }
 
     getExpensesMonth() { //считаем сумму всех обязательных расходов на месяц
-        for (let key in this.Expenses) {
-            this.ExpensesMonth += this.Expenses[key];
+        for (let key in this.expenses) {
+            this.expensesMonth += this.expenses[key];
         }
     }
 
     getBudget() {
         const mothDeposit = this.moneyDeposit * (this.percentDeposit / 100);
-        this.budgetMonth = (+this.budget) + (+this.incomeMonth) - this.ExpensesMonth + mothDeposit;
+        this.budgetMonth = (+this.budget) + (+this.incomeMonth) - this.expensesMonth + mothDeposit;
         this.budgetDay = Math.ceil(this.budgetMonth / 30);
     }
 
@@ -264,7 +264,6 @@ class AppData {
         const valueSelect = this.value;
         if (valueSelect === 'other') {
             depositPercent.style.display = 'inline-block';
-            //закончил код тут ,sk
         } else {
             depositPercent.style.display = 'none';
             depositPercent.value = valueSelect;
@@ -277,7 +276,6 @@ class AppData {
             alert('Процент должен быть от 0 до 100');
             let correctValue = this.value.slice(0, -1);
             this.value = correctValue;
-            //this.blur();
             this.innerHTML = correctValue;
         }
     }

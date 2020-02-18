@@ -273,7 +273,6 @@ class AppData {
         } else {
             depositPercent.style.display = 'none';
             depositPercent.value = valueSelect;
-            depositPercent.value = '';
         }
     }
 

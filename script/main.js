@@ -22,10 +22,14 @@ const start = document.getElementById('start'),
     periodSelectRange = document.querySelector('.period-select'),
     periodAmount = document.querySelector('.period-amount'),
     inputs = document.querySelectorAll('input'),
-    depositCheck = document.querySelector('#deposit-check');
+    depositCheck = document.querySelector('#deposit-check'),
+    depositBank = document.querySelector('.deposit-bank'),
+    depositAmount = document.querySelector('.deposit-amount'),
+    depositPercent = document.querySelector('.deposit-percent');
 
 let ExpensensItem = document.querySelectorAll('.Expenses-items'),
     incomeItem = document.querySelectorAll('.income-items');
+console.log(ExpensensItem);
 
 
 const isNumber = (n) => !isNaN(parseFloat(n)) && isFinite(n);
@@ -64,6 +68,7 @@ class AppData {
         this.getExpensesMonth();
         this.getAddExpensens();
         this.getAddIncome();
+        this.getInfoDeposit();
         this.getBudget();
 
         this.showResult();
@@ -222,7 +227,8 @@ class AppData {
     }
 
     getBudget() {
-        this.budgetMonth = (+this.budget) + (+this.incomeMonth) - this.ExpensesMonth;
+        const mothDeposit = this.moneyDeposit * (this.percentDeposit / 100);
+        this.budgetMonth = (+this.budget) + (+this.incomeMonth) - this.ExpensesMonth + mothDeposit;
         this.budgetDay = Math.ceil(this.budgetMonth / 30);
     }
 
@@ -247,11 +253,38 @@ class AppData {
         return this.budgetMonth * periodSelectRange.value;
     }
 
+    getInfoDeposit() {
+        if (this.deposit) {
+            this.percentDeposit = depositPercent.value;
+            this.moneyDeposit = depositAmount.value;
+        }
+    }
+
+    changePercent() {
+        const valueSelect = this.value;
+        if (valueSelect === 'other') {
+            depositPercent.style.display = 'inline-block';
+            //закончил код тут ,sk
+        } else {
+            depositPercent.style.display = 'none';
+            depositPercent.value = valueSelect;
+        }
+    }
+
     depositHendler() {
         if (depositCheck.checked) {
-            console.log('check');
+            depositBank.style.display = 'inline-block';
+            depositAmount.style.display = 'inline-block';
+            this.deposit = true;
+            depositBank.addEventListener('change', this.changePercent);
         } else {
-            console.log('unchecked');
+            depositBank.style.display = 'none';
+            depositAmount.style.display = 'none';
+            depositPercent.style.display = 'none';
+            depositBank.value = '';
+            depositAmount.value = '';
+            this.deposit = false;
+            depositBank.removeEventListener('change', this.changePercent);
         }
     }
 
